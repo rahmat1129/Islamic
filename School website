@@ -1,0 +1,387 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Example School</title>
+    <style>
+        /* Reset some default styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern, readable font */
+        }
+
+        body {
+            line-height: 1.6; /* Improved readability */
+            color: #333; /* Dark gray for text */
+            background-color: #f4f4f4; /* Light gray background */
+        }
+
+        /* Header Styles */
+        header {
+            background-color: #0056b3; /* Darker blue for header */
+            color: #fff;
+            padding: 1rem 0;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header nav ul {
+            list-style: none;
+            display: inline-block; /* Horizontal navigation */
+        }
+
+        header nav ul li {
+            display: inline;
+            margin: 0 1rem;
+        }
+
+        header nav a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s ease; /* Smooth color transition */
+            padding: 0.5rem 1rem;  /* Padding around links */
+            border-radius: 5px;      /* Rounded corners */
+            display: inline-block; /* So padding/border applies correctly */
+        }
+
+        header nav a:hover {
+            background-color: #007bff; /* Hover effect */
+            color: #fff;
+        }
+
+
+        /* Main Content Styles */
+        main {
+            padding: 2rem;
+        }
+
+        .hero {
+            background: url('https://via.placeholder.com/1200x400') no-repeat center center/cover; /* Replace with actual image */
+            color: #fff;
+            text-align: center;
+            padding: 4rem 0;
+            margin-bottom: 2rem;
+            position: relative; /* For the overlay */
+        }
+       .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Dark overlay */
+            z-index: 1;
+        }
+
+        .hero-content {
+          position: relative;
+          z-index: 2;
+        }
+
+        .hero h2 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Text shadow */
+        }
+     .hero p {
+      font-size: 1.2rem;
+       text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+     }
+
+        .section {
+            margin-bottom: 2rem;
+            background-color: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #0056b3; /* Consistent blue for titles */
+        }
+        .cards {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+          gap: 1rem;
+        }
+
+        .card {
+          background-color: #fff;
+          border: 1px solid #ddd;
+          padding: 1rem;
+          border-radius: 8px;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+          transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+         .card:hover {
+            transform: translateY(-5px);  /* Lift the card on hover */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Enhanced shadow */
+        }
+      .card img {
+            width: 100%;
+            height: auto;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 1rem;
+            border-radius: 8px 8px 0 0;
+        }
+       .card h3 {
+         font-size: 1.5rem;
+         margin-bottom: 0.5rem;
+        }
+         .card-content {
+             display: flex;
+             flex-direction: column; /* Stack content vertically */
+             height: 100%; /* Stretch content to fill card */
+        }
+
+         .card p {
+          margin-bottom: 1rem;
+          flex-grow: 1; /* Paragraph takes up available space*/
+        }
+
+        .card a {
+          display: inline-block;
+          padding: 0.5rem 1rem;
+          background-color: #007bff;
+          color: #fff;
+          text-decoration: none;
+          border-radius: 5px;
+          transition: background-color 0.3s ease;
+            margin-top: auto;   /* Push the link to the bottom */
+            align-self: flex-start; /* Align to the start (left) */
+
+        }
+
+        .card a:hover {
+           background-color: #0056b3;
+        }
+
+
+        /* Form Styles */
+        .form-section {
+          max-width: 600px;
+          margin: 0 auto;
+           background-color: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .form-section label {
+          display: block;
+          margin-bottom: 0.5rem;
+        }
+        .form-section input[type="text"],
+        .form-section input[type="email"],
+        .form-section textarea {
+          width: 100%;
+          padding: 0.8rem;
+            margin-bottom: 1rem;
+          border: 1px solid #ddd;
+           border-radius: 4px;
+         font-size: 1rem; /* Ensure good readability */
+        }
+
+        .form-section textarea {
+          resize: vertical; /* Allow only vertical resizing */
+            min-height: 120px; /* Set a minimum height */
+        }
+        .form-section input[type="submit"] {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 1rem;
+        }
+         .form-section input[type="submit"]:hover {
+             background-color: #0056b3;
+        }
+
+
+        /* Footer Styles */
+        footer {
+                background-color: #333;
+            color: #fff;
+            text-align: center;
+           padding: 1rem 0;
+           margin-top: 2rem; /* Space between main content and footer */
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            header nav ul li {
+                margin: 0 0.5rem;
+            }
+
+            main {
+                padding: 1rem;
+            }
+          .hero {
+             padding: 2rem 0;
+           }
+           .hero h2 {
+              font-size: 2rem;
+           }
+           .section {
+             padding: 1rem;
+           }
+
+        }
+         @media (max-width: 480px) {
+            header nav ul {
+               display: block; /* Stack navigation links */
+                text-align: center;
+            }
+            header nav ul li {
+              display: block;
+                margin: 0.5rem 0;
+             }
+            .hero h2{
+                  font-size: 1.5rem;
+              }
+             .hero p{
+                    font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Example School</h1>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About Us</a></li>
+                <li><a href="#courses">Courses</a></li>
+                <li><a href="#admissions">Admissions</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero" id="home">
+          <div class="hero-content">
+            <h2>Welcome to Our School</h2>
+            <p>Providing quality education for a brighter future.</p>
+            </div>
+        </section>
+
+        <section class="section" id="about">
+            <h2 class="section-title">About Us</h2>
+            <p>Learn about our mission, vision, and history.</p>
+               <p>
+        Example School is committed to providing a nurturing and stimulating
+        learning environment where students can excel academically, grow
+        personally, and develop into responsible global citizens. Founded in
+        19XX, we have a long-standing tradition of academic excellence and a
+        strong commitment to our students' well-being. Our dedicated faculty
+        and staff work tirelessly to create a supportive community where every
+        student feels valued and empowered to reach their full potential.
+      </p>
+        </section>
+
+        <section class="section" id="courses">
+            <h2 class="section-title">Our Courses</h2>
+              <div class="cards">
+                 <div class="card">
+                     <img src="https://via.placeholder.com/300x200" alt="Course 1">
+                    <div class= "card-content">
+                     <h3>Mathematics</h3>
+                     <p>Explore the fundamentals of mathematics.</p>
+                     <a href="#">Learn More</a>
+                      </div>
+                 </div>
+                 <div class="card">
+                      <img src="https://via.placeholder.com/300x200" alt="Course 2">
+                      <div class= "card-content">
+                        <h3>Science</h3>
+                        <p>Discover the wonders of the natural world.</p>
+                        <a href="#">Learn More</a>
+                       </div>
+                   </div>
+                 <div class="card">
+                     <img src="https://via.placeholder.com/300x200" alt="Course 3">
+                      <div class= "card-content">
+                        <h3>English Literature</h3>
+                        <p>Dive into classic and contemporary literature.</p>
+                        <a href="#">Learn More</a>
+                      </div>
+                 </div>
+                 <div class="card">
+                      <img src="https://via.placeholder.com/300x200" alt="Course 4">
+                       <div class= "card-content">
+                        <h3>History</h3>
+                        <p>Uncover the events that shaped our world.</p>
+                        <a href="#">Learn More</a>
+                      </div>
+                   </div>
+              </div>
+        </section>
+
+        <section class="section" id="admissions">
+            <h2 class="section-title">Admissions</h2>
+            <p>Find out how to join our school community.</p>
+                 <p>
+        We welcome applications from students of all backgrounds who demonstrate
+        a passion for learning and a commitment to personal growth. Our
+        admissions process is designed to be holistic, taking into account
+        academic achievements, extracurricular involvement, and personal
+        qualities. To apply, please submit the following:
+      </p>
+      <ul>
+        <li>Completed application form</li>
+        <li>Academic transcripts</li>
+        <li>Letters of recommendation</li>
+        <li>Personal essay</li>
+      </ul>
+      <p>
+        The deadline for applications is [Date]. We encourage prospective
+        students to visit our campus and attend an information session to learn
+        more about our school.
+      </p>
+        </section>
+
+         <section class="section form-section" id="contact">
+           <h2 class="section-title">Contact Us</h2>
+          <form action="#" method="post">
+                 <label for="name">Name:</label>
+                 <input type="text" id="name" name="name" required>
+
+                 <label for="email">Email:</label>
+                 <input type="email" id="email" name="email" required>
+
+                  <label for="message">Message:</label>
+                 <textarea id="message" name="message" required></textarea>
+
+               <input type="submit" value="Send Message">
+            </form>
+
+     </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Example School. All rights reserved.</p>
+    </footer>
+</body>
+</html>
+```
