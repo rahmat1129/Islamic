@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Notes App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+        .dark-mode {
+            background-color: #1a1a1a;
+            color: #ffffff;
+        }
+        .dark-mode .bg-white {
+            background-color: #2d2d2d;
+            color: #ffffff;
+        }
+        .dark-mode textarea {
+            background-color: #3d3d3d;
+            color: #ffffff;
+            border-color: #4d4d4d;
+        }
+        .note-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .note-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-6 dark:bg-gray-900">
+    <div class="container mx-auto max-w-6xl">
+        <!-- Header -->
+        <div class="text-center mb-10">
+            <h1 class="text-5xl font-bold text-indigo-600 dark:text-indigo-400">Ultimate Notes App</h1>
+            <p class="text-gray-600 dark:text-gray-400 mt-2">Save, view, and manage your notes with advanced text manipulation.</p>
+        </div>
+
+        <!-- Main Container -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Left Column: Notes List -->
+            <div class="col-span-1">
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+                    <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-4">Your Notes</h2>
+                    <div id="notesList" class="space-y-4">
+                        <!-- Notes will be dynamically added here -->
+                    </div>
+                    <button id="newNoteButton" class="w-full bg-green-600 text-white py-3 px-4 rounded-md shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 mt-4">New Note</button>
+                </div>
+            </div>
+
+            <!-- Right Column: Note Editor and Text Manipulation -->
+            <div class="col-span-2">
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+                    <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-4">Note Editor</h2>
+                    <textarea id="noteEditor" rows="10" class="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"></textarea>
+                    <div class="mt-4 flex justify-between">
+                        <button id="saveNoteButton" class="bg-indigo-600 text-white py-2 px-4 rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Save Note</button>
+                        <button id="deleteNoteButton" class="bg-red-500 text-white py-2 px-4 rounded-md shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">Delete Note</button>
+                    </div>
+
+                    <!-- Text Manipulation Features -->
+                    <div class="mt-8">
+                        <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-4">Text Manipulation</h2>
+                        <div class="grid grid-cols-2 gap-4">
+                            <!-- Replace Words -->
+                            <div class="col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Replace Words:</label>
+                                <div class="flex space-x-2">
+                                    <input type="text" id="searchWord" placeholder="Search word" class="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    <input type="text" id="replaceWord" placeholder="Replace with" class="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    <button id="replaceButton" class="bg-yellow-500 text-white py-2 px-4 rounded-md shadow-sm hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">Replace</button>
+                                </div>
+                            </div>
+
+                            <!-- Delete Lines -->
+                            <div class="col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Delete Lines:</label>
+                                <div class="flex space-x-2">
+                                    <input type="text" id="removeWord" placeholder="Remove lines containing word" class="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    <button id="removeButton" class="bg-red-500 text-white py-2 px-4 rounded-md shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">Remove Lines</button>
+                                </div>
+                            </div>
+
+                            <!-- Set Split Size -->
+                            <div class="col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Set Split Size:</label>
+                                <div class="flex space-x-2">
+                                    <input type="number" id="maxChars" placeholder="Max characters per box" class="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white" value="100">
+                                    <button id="splitTextButton" class="bg-blue-500 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Split Text</button>
+                                </div>
+                            </div>
+
+                            <!-- Other Text Manipulation Features -->
+                            <button id="mergeButton" class="bg-blue-500 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Merge Text</button>
+                            <button id="trimButton" class="bg-blue-500 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Trim Whitespace</button>
+                            <button id="removeDuplicatesButton" class="bg-blue-500 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Remove Duplicates</button>
+                            <button id="reverseButton" class="bg-blue-500 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Reverse Text</button>
+                            <button id="uppercaseButton" class="bg-blue-500 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">UPPERCASE</button>
+                            <button id="lowercaseButton" class="bg-blue-500 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">lowercase</button>
+                            <button id="titlecaseButton" class="bg-blue-500 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Title Case</button>
+                            <button id="removeEmptyLinesButton" class="bg-blue-500 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Remove Empty Lines</button>
+                        </div>
+                    </div>
+
+                    <!-- Text Analysis Section -->
+                    <div id="analysis" class="mt-8 p-4 bg-gray-50 dark:bg-gray-700 rounded-md shadow-sm">
+                        <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">Text Analysis</h3>
+                        <ul id="analysisResults" class="list-disc pl-5 text-gray-600 dark:text-gray-400"></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dark Mode Toggle -->
+        <div class="mt-6 flex justify-end">
+            <button id="darkModeToggle" class="bg-gray-800 text-white py-3 px-6 rounded-md shadow-sm hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800">Toggle Dark Mode</button>
+        </div>
+    </div>
+
+    <script>
+        let notes = JSON.parse(localStorage.getItem('notes')) || [];
+        let currentNoteId = null;
+
+        // Function to render notes list
+        function renderNotesList() {
+            const notesList = document.getElementById('notesList');
+            notesList.innerHTML = '';
+            notes.forEach((note, index) => {
+                const noteCard = document.createElement('div');
+                noteCard.className = 'note-card bg-white dark:bg-gray-700 p-4 rounded-md shadow-sm cursor-pointer';
+                noteCard.innerHTML = `
+                    <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300">Note ${index + 1}</h3>
+                    <p class="text-gray-600 dark:text-gray-400 truncate">${note.text.substring(0, 50)}...</p>
+                `;
+                noteCard.addEventListener('click', () => openNote(index));
+                notesList.appendChild(noteCard);
+            });
+        }
+
+        // Function to open a note
+        function openNote(index) {
+            currentNoteId = index;
+            const noteEditor = document.getElementById('noteEditor');
+            noteEditor.value = notes[index].text;
+        }
+
+        // Function to save a note
+        document.getElementById('saveNoteButton').addEventListener('click', function() {
+            const noteEditor = document.getElementById('noteEditor');
+            const noteText = noteEditor.value;
+            if (currentNoteId !== null) {
+                notes[currentNoteId].text = noteText; // Update existing note
+            } else {
+                notes.push({ text: noteText }); // Add new note
+            }
+            localStorage.setItem('notes', JSON.stringify(notes));
+            renderNotesList();
+            currentNoteId = null;
+            noteEditor.value = '';
+        });
+
+        // Function to delete a note
+        document.getElementById('deleteNoteButton').addEventListener('click', function() {
+            if (currentNoteId !== null) {
+                notes.splice(currentNoteId, 1);
+                localStorage.setItem('notes', JSON.stringify(notes));
+                renderNotesList();
+                document.getElementById('noteEditor').value = '';
+                currentNoteId = null;
+            }
+        });
+
+        // Function to create a new note
+        document.getElementById('newNoteButton').addEventListener('click', function() {
+            currentNoteId = null;
+            document.getElementById('noteEditor').value = '';
+        });
+
+        // Dark Mode Toggle
+        document.getElementById('darkModeToggle').addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+        });
+
+        // Load notes on page load
+        window.onload = function() {
+            renderNotesList();
+        };
+
+        // Text Manipulation Features
+        document.getElementById('replaceButton').addEventListener('click', function() {
+            const searchWord = document.getElementById('searchWord').value;
+            const replaceWord = document.getElementById('replaceWord').value;
+            const noteEditor = document.getElementById('noteEditor');
+            if (searchWord && replaceWord) {
+                const regex = new RegExp(searchWord, 'gi');
+                noteEditor.value = noteEditor.value.replace(regex, replaceWord);
+            }
+        });
+
+        document.getElementById('removeButton').addEventListener('click', function() {
+            const removeWord = document.getElementById('removeWord').value;
+            const noteEditor = document.getElementById('noteEditor');
+            if (removeWord) {
+                const lines = noteEditor.value.split('\n');
+                const filteredLines = lines.filter(line => !line.includes(removeWord));
+                noteEditor.value = filteredLines.join('\n');
+            }
+        });
+
+        document.getElementById('splitTextButton').addEventListener('click', function() {
+            const inputText = document.getElementById('noteEditor').value;
+            const maxChars = parseInt(document.getElementById('maxChars').value);
+            const outputDiv = document.getElementById('analysisResults');
+            outputDiv.innerHTML = '';
+
+            if (inputText && maxChars > 0) {
+                let startIndex = 0;
+                while (startIndex < inputText.length) {
+                    const chunk = inputText.substring(startIndex, startIndex + maxChars);
+                    const box = document.createElement('div');
+                    box.className = 'p-4 bg-white dark:bg-gray-700 border border-gray-300 rounded-md shadow-sm relative';
+                    box.innerHTML = `
+                        <textarea class="w-full h-full border-none focus:ring-0 dark:bg-gray-700 dark:text-white">${chunk}</textarea>
+                        <button class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200" onclick="copyToClipboard(this)">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                        <button class="absolute top-2 right-10 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200" onclick="speakText(this)">
+                            <i class="fas fa-volume-up"></i>
+                        </button>
+                    `;
+                    outputDiv.appendChild(box);
+                    startIndex += maxChars;
+                }
+            }
+        });
+
+        // Other text manipulation functions (merge, trim, etc.) can be added here.
+        // Load saved notes from local storage on page load
+window.onload = function () {
+    // Retrieve saved notes from local storage
+    const savedNotes = JSON.parse(localStorage.getItem('savedNotes')) || [];
+
+    // Get the container where saved notes will be displayed
+    const savedNotesList = document.getElementById('savedNotesList');
+
+    // Clear any existing content in the saved notes list
+    savedNotesList.innerHTML = '';
+
+    // Loop through each saved note and display it
+    savedNotes.forEach((note, index) => {
+        // Create a list item for each note
+        const li = document.createElement('li');
+        li.className = 'mb-2';
+
+        // Add the note text and buttons for editing and deleting
+        li.innerHTML = `
+            <span>${note}</span>
+            <button onclick="editNote(${index})" class="ml-2 text-blue-500 hover:text-blue-700">Edit</button>
+            <button onclick="deleteNote(${index})" class="ml-2 text-red-500 hover:text-red-700">Delete</button>
+        `;
+
+        // Append the list item to the saved notes list
+        savedNotesList.appendChild(li);
+    });
+};
+// Merge Text
+document.getElementById('mergeButton').addEventListener('click', function() {
+    const textareas = document.querySelectorAll('#analysisResults textarea');
+    let mergedText = '';
+    textareas.forEach(textarea => {
+        mergedText += textarea.value + '\n';
+    });
+    document.getElementById('noteEditor').value = mergedText.trim();
+});
+
+// Trim Whitespace
+document.getElementById('trimButton').addEventListener('click', function() {
+    const noteEditor = document.getElementById('noteEditor');
+    noteEditor.value = noteEditor.value.trim();
+});
+
+// Remove Duplicates
+document.getElementById('removeDuplicatesButton').addEventListener('click', function() {
+    const noteEditor = document.getElementById('noteEditor');
+    const lines = noteEditor.value.split('\n');
+    const uniqueLines = [...new Set(lines)];
+    noteEditor.value = uniqueLines.join('\n');
+});
+
+// Reverse Text
+document.getElementById('reverseButton').addEventListener('click', function() {
+    const noteEditor = document.getElementById('noteEditor');
+    noteEditor.value = noteEditor.value.split('').reverse().join('');
+});
+
+// UPPERCASE
+document.getElementById('uppercaseButton').addEventListener('click', function() {
+    const noteEditor = document.getElementById('noteEditor');
+    noteEditor.value = noteEditor.value.toUpperCase();
+});
+
+// lowercase
+document.getElementById('lowercaseButton').addEventListener('click', function() {
+    const noteEditor = document.getElementById('noteEditor');
+    noteEditor.value = noteEditor.value.toLowerCase();
+});
+
+// Title Case
+document.getElementById('titlecaseButton').addEventListener('click', function() {
+    const noteEditor = document.getElementById('noteEditor');
+    noteEditor.value = noteEditor.value.replace(/\w\S*/g, function(txt) {
+        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
+});
+
+// Remove Empty Lines
+document.getElementById('removeEmptyLinesButton').addEventListener('click', function() {
+    const noteEditor = document.getElementById('noteEditor');
+    const lines = noteEditor.value.split('\n');
+    const nonEmptyLines = lines.filter(line => line.trim() !== '');
+    noteEditor.value = nonEmptyLines.join('\n');
+});
+    </script>
+</body>
+</html>
